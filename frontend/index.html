@@ -1,0 +1,1958 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        ACIP - AI Codebase Intelligence Platform
+    </title>
+
+
+    <style>
+
+        /* ==================================================
+           GLOBAL
+        ================================================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+
+            margin: 0;
+
+            padding: 0;
+
+            width: 100%;
+
+            height: 100%;
+
+            overflow: hidden;
+
+            background: #1e1e1e;
+
+            color: #cccccc;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+        }
+
+
+        button {
+
+            border: none;
+
+            cursor: pointer;
+
+        }
+
+
+        /* ==================================================
+           TOP BAR
+        ================================================== */
+
+        .topbar {
+
+            width: 100%;
+
+            height: 55px;
+
+            background: #181818;
+
+            border-bottom:
+                1px solid #333;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding:
+                0 15px;
+
+        }
+
+
+        .logo {
+
+            color: #ffffff;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            white-space: nowrap;
+
+        }
+
+
+        .github-input {
+
+            flex: 1;
+
+            height: 34px;
+
+            min-width: 0;
+
+            background: #252525;
+
+            border:
+                1px solid #444;
+
+            border-radius: 5px;
+
+            color: #ffffff;
+
+            padding:
+                0 12px;
+
+            outline: none;
+
+        }
+
+
+        .github-input:focus {
+
+            border-color:
+                #007acc;
+
+        }
+
+
+        .clone-button {
+
+            height: 34px;
+
+            padding:
+                0 18px;
+
+            border-radius: 5px;
+
+            background:
+                #007acc;
+
+            color: #ffffff;
+
+        }
+
+
+        .clone-button:hover {
+
+            background:
+                #0088e8;
+
+        }
+
+
+        .save-button {
+
+            height: 34px;
+
+            padding:
+                0 18px;
+
+            border-radius: 5px;
+
+            background:
+                #16825d;
+
+            color: #ffffff;
+
+        }
+
+
+        .save-button:hover {
+
+            background:
+                #1a9b70;
+
+        }
+
+
+        /* ==================================================
+           MAIN
+        ================================================== */
+
+        .main {
+
+            width: 100%;
+
+            height:
+                calc(100vh - 80px);
+
+            display: flex;
+
+        }
+
+
+        /* ==================================================
+           SIDEBAR
+        ================================================== */
+
+        .sidebar {
+
+            width: 270px;
+
+            min-width: 270px;
+
+            height: 100%;
+
+            background:
+                #181818;
+
+            border-right:
+                1px solid #333;
+
+            overflow-y: auto;
+
+            overflow-x: hidden;
+
+        }
+
+
+        .explorer-title {
+
+            height: 40px;
+
+            padding:
+                13px 15px;
+
+            color:
+                #999999;
+
+            font-size:
+                12px;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                1px;
+
+        }
+
+
+        .file-tree {
+
+            padding:
+                5px;
+
+        }
+
+
+        .tree-item {
+
+            padding:
+                7px 10px;
+
+            cursor: pointer;
+
+            font-size:
+                13px;
+
+            border-radius:
+                4px;
+
+            white-space:
+                nowrap;
+
+            overflow:
+                hidden;
+
+            text-overflow:
+                ellipsis;
+
+        }
+
+
+        .tree-item:hover {
+
+            background:
+                #2a2d2e;
+
+        }
+
+
+        .tree-file {
+
+            color:
+                #cccccc;
+
+        }
+
+
+        .tree-file.active {
+
+            background:
+                #37373d;
+
+            color:
+                #ffffff;
+
+        }
+
+
+        /* ==================================================
+           EDITOR
+        ================================================== */
+
+        .editor {
+
+            flex: 1;
+
+            min-width: 0;
+
+            min-height: 0;
+
+            display: flex;
+
+            flex-direction: column;
+
+            background:
+                #1e1e1e;
+
+        }
+
+
+        /* ==================================================
+           TABS
+        ================================================== */
+
+        .tabs {
+
+            width: 100%;
+
+            height: 40px;
+
+            min-height: 40px;
+
+            display: flex;
+
+            background:
+                #181818;
+
+            border-bottom:
+                1px solid #333;
+
+            overflow-x: auto;
+
+            overflow-y: hidden;
+
+        }
+
+
+        .tabs::-webkit-scrollbar {
+
+            height: 5px;
+
+        }
+
+
+        .tab {
+
+            height: 40px;
+
+            min-width: 150px;
+
+            max-width: 240px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content:
+                space-between;
+
+            gap: 10px;
+
+            padding:
+                0 8px 0 12px;
+
+            background:
+                #181818;
+
+            border-right:
+                1px solid #333;
+
+            color:
+                #999999;
+
+            font-size:
+                13px;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        .tab:hover {
+
+            background:
+                #252525;
+
+        }
+
+
+        .tab.active {
+
+            color:
+                #ffffff;
+
+            background:
+                #1e1e1e;
+
+            border-top:
+                2px solid #007acc;
+
+        }
+
+
+        .tab-name {
+
+            flex: 1;
+
+            min-width: 0;
+
+            overflow:
+                hidden;
+
+            text-overflow:
+                ellipsis;
+
+            white-space:
+                nowrap;
+
+        }
+
+
+        .tab-close {
+
+            width: 22px;
+
+            height: 22px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            border-radius:
+                3px;
+
+            color:
+                #888888;
+
+            font-size:
+                16px;
+
+        }
+
+
+        .tab-close:hover {
+
+            color:
+                #ffffff;
+
+            background:
+                #444444;
+
+        }
+
+
+        .modified {
+
+            color:
+                #f0c674;
+
+            font-size:
+                18px;
+
+            line-height:
+                10px;
+
+        }
+
+
+        /* ==================================================
+           EDITOR AREA
+        ================================================== */
+
+        .editor-area {
+
+            flex: 1;
+
+            min-height: 0;
+
+            display: flex;
+
+            overflow: hidden;
+
+            background:
+                #1e1e1e;
+
+        }
+
+
+        /* ==================================================
+           LINE NUMBERS
+        ================================================== */
+
+        .line-numbers {
+
+            width:
+                60px;
+
+            min-width:
+                60px;
+
+            height:
+                100%;
+
+            flex-shrink:
+                0;
+
+            padding:
+                15px 10px 15px 0;
+
+            background:
+                #1e1e1e;
+
+            color:
+                #606060;
+
+            text-align:
+                right;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size:
+                14px;
+
+            line-height:
+                1.6;
+
+            white-space:
+                pre;
+
+            overflow:
+                hidden;
+
+            user-select:
+                none;
+
+        }
+
+
+        /* ==================================================
+           CODE WRAPPER
+        ================================================== */
+
+        .code-wrapper {
+
+            flex:
+                1;
+
+            min-width:
+                0;
+
+            min-height:
+                0;
+
+            overflow:
+                hidden;
+
+        }
+
+
+        /* ==================================================
+           CODE EDITOR
+        ================================================== */
+
+        #codeEditor {
+
+            display:
+                block;
+
+            width:
+                100%;
+
+            height:
+                100%;
+
+            margin:
+                0;
+
+            padding:
+                15px;
+
+            resize:
+                none;
+
+            border:
+                none;
+
+            outline:
+                none;
+
+            background:
+                #1e1e1e;
+
+            color:
+                #d4d4d4;
+
+            font-family:
+                "Courier New",
+                monospace;
+
+            font-size:
+                14px;
+
+            line-height:
+                1.6;
+
+            letter-spacing:
+                0;
+
+            white-space:
+                pre;
+
+            overflow:
+                auto;
+
+            tab-size:
+                4;
+
+        }
+
+
+        #codeEditor::selection {
+
+            background:
+                #264f78;
+
+        }
+
+
+        #codeEditor::-webkit-scrollbar {
+
+            width:
+                12px;
+
+            height:
+                12px;
+
+        }
+
+
+        #codeEditor::-webkit-scrollbar-thumb {
+
+            background:
+                #424242;
+
+        }
+
+
+        #codeEditor::-webkit-scrollbar-track {
+
+            background:
+                #1e1e1e;
+
+        }
+
+
+        /* ==================================================
+           STATUS BAR
+        ================================================== */
+
+        .statusbar {
+
+            width:
+                100%;
+
+            height:
+                25px;
+
+            min-height:
+                25px;
+
+            background:
+                #007acc;
+
+            color:
+                #ffffff;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            padding:
+                0 10px;
+
+            font-size:
+                12px;
+
+        }
+
+
+        /* ==================================================
+           AI FLOATING BUTTON
+        ================================================== */
+
+        .ai-button {
+
+            position:
+                fixed;
+
+            right:
+                25px;
+
+            bottom:
+                50px;
+
+            width:
+                58px;
+
+            height:
+                58px;
+
+            border-radius:
+                50%;
+
+            background:
+                #7c3aed;
+
+            color:
+                #ffffff;
+
+            font-size:
+                25px;
+
+            box-shadow:
+                0 5px 25px
+                rgba(0, 0, 0, 0.5);
+
+            z-index:
+                100;
+
+            transition:
+                transform 0.15s;
+
+        }
+
+
+        .ai-button:hover {
+
+            transform:
+                scale(1.08);
+
+        }
+
+
+        /* ==================================================
+           EMPTY EDITOR
+        ================================================== */
+
+        .empty-editor {
+
+            width:
+                100%;
+
+            height:
+                100%;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            color:
+                #666666;
+
+            font-size:
+                16px;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- ==================================================
+         TOP BAR
+    ================================================== -->
+
+    <div class="topbar">
+
+        <div class="logo">
+            ACIP
+        </div>
+
+
+        <input
+            class="github-input"
+            id="githubUrl"
+            type="text"
+            placeholder="Enter GitHub repository URL..."
+        >
+
+
+        <button
+            class="clone-button"
+            onclick="cloneRepository()"
+        >
+            Clone
+        </button>
+
+
+        <button
+            class="save-button"
+            onclick="saveCurrentFile()"
+        >
+            Save
+        </button>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         MAIN
+    ================================================== -->
+
+    <div class="main">
+
+
+        <!-- ==================================================
+             FILE EXPLORER
+        ================================================== -->
+
+        <aside class="sidebar">
+
+            <div class="explorer-title">
+                Explorer
+            </div>
+
+
+            <div
+                class="file-tree"
+                id="fileTree"
+            >
+
+                Clone a repository to begin.
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- ==================================================
+             EDITOR
+        ================================================== -->
+
+        <section class="editor">
+
+
+            <!-- TABS -->
+
+            <div
+                class="tabs"
+                id="tabs"
+            >
+            </div>
+
+
+            <!-- EDITOR AREA -->
+
+            <div class="editor-area">
+
+
+                <!-- LINE NUMBERS -->
+
+                <div
+                    class="line-numbers"
+                    id="lineNumbers"
+                >1</div>
+
+
+                <!-- CODE -->
+
+                <div class="code-wrapper">
+
+                    <textarea
+                        id="codeEditor"
+                        spellcheck="false"
+                        autocomplete="off"
+                        autocorrect="off"
+                        autocapitalize="off"
+                        placeholder="Select a file..."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         STATUS BAR
+    ================================================== -->
+
+    <div class="statusbar">
+
+        <span id="status">
+            Ready
+        </span>
+
+
+        <span id="currentFile">
+            No file
+        </span>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         AI BUTTON
+    ================================================== -->
+
+    <button
+        class="ai-button"
+        onclick="openAI()"
+        title="AI Assistant"
+    >
+        ✨
+    </button>
+
+
+
+    <script>
+
+
+        // ==================================================
+        // APPLICATION STATE
+        // ==================================================
+
+        let repository = "";
+
+        let currentFile = "";
+
+        /*
+         * Every open file is stored here.
+         *
+         * Example:
+         *
+         * openFiles = {
+         *
+         *     "main.py": {
+         *         code: "...",
+         *         modified: false
+         *     },
+         *
+         *     "utils.py": {
+         *         code: "...",
+         *         modified: true
+         *     }
+         *
+         * }
+         */
+
+        let openFiles = {};
+
+
+
+        // ==================================================
+        // DOM REFERENCES
+        // ==================================================
+
+        const editor =
+            document.getElementById(
+                "codeEditor"
+            );
+
+
+        const lineNumbers =
+            document.getElementById(
+                "lineNumbers"
+            );
+
+
+
+        // ==================================================
+        // CLONE REPOSITORY
+        // ==================================================
+
+        async function cloneRepository() {
+
+            const github =
+                document
+                    .getElementById(
+                        "githubUrl"
+                    )
+                    .value
+                    .trim();
+
+
+            if (!github) {
+
+                setStatus(
+                    "Enter a GitHub repository URL"
+                );
+
+                return;
+
+            }
+
+
+            setStatus(
+                "Cloning repository..."
+            );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/clone?github=${encodeURIComponent(github)}`,
+                        {
+                            method:
+                                "POST"
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (data.error) {
+
+                    throw new Error(
+                        data.error
+                    );
+
+                }
+
+
+                repository =
+                    data.directory;
+
+
+                /*
+                 * Reset currently open tabs
+                 * when a new repository
+                 * is cloned.
+                 */
+
+                openFiles = {};
+
+                currentFile = "";
+
+                renderTabs();
+
+
+                editor.value = "";
+
+                updateLineNumbers();
+
+
+                document
+                    .getElementById(
+                        "currentFile"
+                    )
+                    .textContent =
+                    "No file";
+
+
+                displayFiles(
+                    data.files
+                );
+
+
+                setStatus(
+                    data.message
+                );
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    error
+                );
+
+
+                setStatus(
+                    "Error: " +
+                    error.message
+                );
+
+            }
+
+        }
+
+
+
+        // ==================================================
+        // DISPLAY FILES
+        // ==================================================
+
+        function displayFiles(files) {
+
+            const tree =
+                document.getElementById(
+                    "fileTree"
+                );
+
+
+            tree.innerHTML = "";
+
+
+            if (
+                files.length === 0
+            ) {
+
+                tree.textContent =
+                    "No files found.";
+
+                return;
+
+            }
+
+
+            files.forEach(
+                file => {
+
+                    const element =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    element.className =
+                        "tree-item tree-file";
+
+
+                    element.dataset.file =
+                        file;
+
+
+                    element.textContent =
+                        "📄 " + file;
+
+
+                    element.onclick =
+                        () => {
+
+                            openFile(
+                                file
+                            );
+
+                        };
+
+
+                    tree.appendChild(
+                        element
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        // ==================================================
+        // OPEN FILE
+        // ==================================================
+
+        async function openFile(file) {
+
+            /*
+             * If file is already open,
+             * simply switch to its tab.
+             */
+
+            if (
+                openFiles[file]
+            ) {
+
+                switchTab(
+                    file
+                );
+
+                return;
+
+            }
+
+
+            setStatus(
+                "Opening " +
+                file +
+                "..."
+            );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/file?repository=${encodeURIComponent(repository)}&path=${encodeURIComponent(file)}`
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (data.error) {
+
+                    throw new Error(
+                        data.error
+                    );
+
+                }
+
+
+                /*
+                 * Store file in memory.
+                 */
+
+                openFiles[file] = {
+
+                    code:
+                        data.code,
+
+                    modified:
+                        false
+
+                };
+
+
+                switchTab(
+                    file
+                );
+
+
+                setStatus(
+                    "Opened " +
+                    file
+                );
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    error
+                );
+
+
+                setStatus(
+                    "Error: " +
+                    error.message
+                );
+
+            }
+
+        }
+
+
+
+        // ==================================================
+        // SWITCH TAB
+        // ==================================================
+
+        function switchTab(file) {
+
+            if (
+                !openFiles[file]
+            ) {
+
+                return;
+
+            }
+
+
+            currentFile =
+                file;
+
+
+            /*
+             * Load this tab's
+             * code into editor.
+             */
+
+            editor.value =
+                openFiles[file].code;
+
+
+            document
+                .getElementById(
+                    "currentFile"
+                )
+                .textContent =
+                file;
+
+
+            updateLineNumbers();
+
+
+            renderTabs();
+
+
+            highlightActiveFile();
+
+
+            /*
+             * Put cursor at beginning.
+             */
+
+            editor.focus();
+
+            editor.selectionStart =
+                0;
+
+            editor.selectionEnd =
+                0;
+
+        }
+
+
+
+        // ==================================================
+        // RENDER TABS
+        // ==================================================
+
+        function renderTabs() {
+
+            const tabs =
+                document.getElementById(
+                    "tabs"
+                );
+
+
+            tabs.innerHTML = "";
+
+
+            Object.keys(
+                openFiles
+            ).forEach(
+                file => {
+
+                    const tab =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    tab.className =
+                        "tab";
+
+
+                    if (
+                        file ===
+                        currentFile
+                    ) {
+
+                        tab.classList.add(
+                            "active"
+                        );
+
+                    }
+
+
+                    const name =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    name.className =
+                        "tab-name";
+
+
+                    name.textContent =
+                        file;
+
+
+                    name.onclick =
+                        () => {
+
+                            switchTab(
+                                file
+                            );
+
+                        };
+
+
+                    const close =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    close.className =
+                        "tab-close";
+
+
+                    if (
+                        openFiles[file]
+                            .modified
+                    ) {
+
+                        close.innerHTML =
+                            '<span class="modified">●</span>';
+
+                    }
+
+                    else {
+
+                        close.textContent =
+                            "×";
+
+                    }
+
+
+                    close.onclick =
+                        event => {
+
+                            event
+                                .stopPropagation();
+
+                            closeTab(
+                                file
+                            );
+
+                        };
+
+
+                    tab.appendChild(
+                        name
+                    );
+
+
+                    tab.appendChild(
+                        close
+                    );
+
+
+                    tabs.appendChild(
+                        tab
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        // ==================================================
+        // CLOSE TAB
+        // ==================================================
+
+        function closeTab(file) {
+
+            const fileData =
+                openFiles[file];
+
+
+            /*
+             * Don't silently lose
+             * unsaved changes.
+             */
+
+            if (
+                fileData &&
+                fileData.modified
+            ) {
+
+                const confirmed =
+                    confirm(
+                        `${file} has unsaved changes. Close anyway?`
+                    );
+
+
+                if (!confirmed) {
+
+                    return;
+
+                }
+
+            }
+
+
+            delete openFiles[file];
+
+
+            const remaining =
+                Object.keys(
+                    openFiles
+                );
+
+
+            if (
+                file ===
+                currentFile
+            ) {
+
+                if (
+                    remaining.length >
+                    0
+                ) {
+
+                    /*
+                     * Open the last
+                     * remaining tab.
+                     */
+
+                    switchTab(
+                        remaining[
+                            remaining.length - 1
+                        ]
+                    );
+
+                }
+
+                else {
+
+                    currentFile =
+                        "";
+
+                    editor.value =
+                        "";
+
+                    document
+                        .getElementById(
+                            "currentFile"
+                        )
+                        .textContent =
+                        "No file";
+
+                    updateLineNumbers();
+
+                }
+
+            }
+
+
+            renderTabs();
+
+
+            highlightActiveFile();
+
+        }
+
+
+
+        // ==================================================
+        // CODE EDITING
+        // ==================================================
+
+        editor.addEventListener(
+            "input",
+            function() {
+
+                if (
+                    !currentFile ||
+                    !openFiles[currentFile]
+                ) {
+
+                    return;
+
+                }
+
+
+                /*
+                 * Store latest code
+                 * in current tab.
+                 */
+
+                openFiles[
+                    currentFile
+                ].code =
+                    editor.value;
+
+
+                /*
+                 * Mark as modified.
+                 */
+
+                openFiles[
+                    currentFile
+                ].modified =
+                    true;
+
+
+                updateLineNumbers();
+
+
+                renderTabs();
+
+
+                setStatus(
+                    "Unsaved changes"
+                );
+
+            }
+        );
+
+
+
+        // ==================================================
+        // LINE NUMBERS
+        // ==================================================
+
+        function updateLineNumbers() {
+
+            const lineCount =
+                editor.value
+                    .split("\n")
+                    .length;
+
+
+            let numbers = "";
+
+
+            for (
+                let i = 1;
+                i <= lineCount;
+                i++
+            ) {
+
+                numbers +=
+                    i + "\n";
+
+            }
+
+
+            lineNumbers.textContent =
+                numbers;
+
+
+            /*
+             * Keep vertical position
+             * synchronized.
+             */
+
+            lineNumbers.scrollTop =
+                editor.scrollTop;
+
+        }
+
+
+
+        // ==================================================
+        // EDITOR SCROLL
+        // ==================================================
+
+        editor.addEventListener(
+            "scroll",
+            function() {
+
+                /*
+                 * Synchronize vertical
+                 * scrolling.
+                 */
+
+                lineNumbers.scrollTop =
+                    editor.scrollTop;
+
+            }
+        );
+
+
+
+        // ==================================================
+        // SAVE CURRENT FILE
+        // ==================================================
+
+        async function saveCurrentFile() {
+
+            if (
+                !repository
+            ) {
+
+                setStatus(
+                    "No repository loaded"
+                );
+
+                return;
+
+            }
+
+
+            if (
+                !currentFile
+            ) {
+
+                setStatus(
+                    "No file selected"
+                );
+
+                return;
+
+            }
+
+
+            const fileData =
+                openFiles[
+                    currentFile
+                ];
+
+
+            if (!fileData) {
+
+                return;
+
+            }
+
+
+            /*
+             * Make sure latest editor
+             * contents are stored.
+             */
+
+            fileData.code =
+                editor.value;
+
+
+            setStatus(
+                "Saving " +
+                currentFile +
+                "..."
+            );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/file?repository=${encodeURIComponent(repository)}&path=${encodeURIComponent(currentFile)}`,
+                        {
+                            method:
+                                "PUT",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "text/plain"
+
+                            },
+
+                            body:
+                                fileData.code
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (data.error) {
+
+                    throw new Error(
+                        data.error
+                    );
+
+                }
+
+
+                /*
+                 * Mark file as saved.
+                 */
+
+                fileData.modified =
+                    false;
+
+
+                renderTabs();
+
+
+                setStatus(
+                    "Saved ✓"
+                );
+
+            }
+
+
+            catch (error) {
+
+                console.error(
+                    error
+                );
+
+
+                setStatus(
+                    "Save failed: " +
+                    error.message
+                );
+
+            }
+
+        }
+
+
+
+        // ==================================================
+        // CTRL + S
+        // ==================================================
+
+        document.addEventListener(
+            "keydown",
+            function(event) {
+
+                if (
+                    (
+                        event.ctrlKey ||
+                        event.metaKey
+                    ) &&
+                    event.key.toLowerCase()
+                    === "s"
+                ) {
+
+                    event.preventDefault();
+
+                    saveCurrentFile();
+
+                }
+
+            }
+        );
+
+
+
+        // ==================================================
+        // HIGHLIGHT ACTIVE FILE
+        // ==================================================
+
+        function highlightActiveFile() {
+
+            const files =
+                document.querySelectorAll(
+                    ".tree-file"
+                );
+
+
+            files.forEach(
+                element => {
+
+                    if (
+                        element.dataset.file
+                        === currentFile
+                    ) {
+
+                        element.classList.add(
+                            "active"
+                        );
+
+                    }
+
+                    else {
+
+                        element.classList.remove(
+                            "active"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+
+
+        // ==================================================
+        // AI BUTTON
+        // ==================================================
+
+        function openAI() {
+
+            /*
+             * AI functionality will be
+             * connected here later.
+             */
+
+            alert(
+                "AI Assistant will be connected here."
+            );
+
+        }
+
+
+
+        // ==================================================
+        // STATUS
+        // ==================================================
+
+        function setStatus(
+            message
+        ) {
+
+            document
+                .getElementById(
+                    "status"
+                )
+                .textContent =
+                message;
+
+        }
+
+
+        // ==================================================
+        // INITIALIZE
+        // ==================================================
+
+        updateLineNumbers();
+
+    </script>
+
+</body>
+
+</html>
